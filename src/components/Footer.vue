@@ -14,14 +14,13 @@ let activeRoute = ref(route);
 </script>
 
 <template>
-    <div class="footer p-2">
+    <div class="footer p-2 bottom left right absolute sticky">
         <div class="flex space-between routes">
             <span class="p-3 bg-white rounded-lg" v-bind:class="{ 'active-route': activeRoute === 'edit' }">
                 <router-link to="/edit" @click="activeRoute = 'edit'">
                     <img src="../assets/icons/regular/bx-edit.svg" alt="" class="router-icon">
                     </router-link>  
-            </span>
-                
+            </span>            
             <span class="p-3 bg-white rounded-lg" v-bind:class="{ 'active-route': activeRoute === 'reader' }">
                 <router-link to="/reader" @click="activeRoute = 'reader'"> 
                     <img src="../assets/icons/regular/bx-book-open.svg" alt="" class="router-icon">

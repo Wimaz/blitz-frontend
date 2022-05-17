@@ -1,19 +1,38 @@
-<script setup lang="ts">
-    import { ref } from 'vue'
-    defineProps<{
-        page_num?: number,
-        book?: any
-    }>()
-    let words = ref('WORDS WORDS WORDS');
-    let page_count = ref(300);
-    let page_num = ref(0);    
-
-    let word_count = ref(0)    
-    const setWordCount = () => {
-        console.log('SUP?')
-        word_count = ref(words.value.split(' ').length);
-    }
-    setWordCount();
+<script lang="ts">
+    import { ref, defineComponent } from 'vue'
+    import type { Book, Page } from '../interfaces/Book'
+    export default defineComponent({
+        data(): { book: Book | undefined, page: Page | undefined, text: any | undefined, page_index: number, page_num: number } {
+            return {            
+                book: undefined,
+                page: undefined,
+                text: undefined,
+                page_index: 0,
+                page_num: 0
+            }
+        },
+        created(): void {
+            const activeBook = localStorage.getItem('activeBook')
+            if(activeBook){
+                const book: Book = JSON.parse(activeBook);
+                this.book = book;
+                this.changePage(0);
+            }
+            
+        },
+        methods: {
+            getWordCount(content: string): number {
+                return content.split(' ').length;
+            },
+            changePage(page_num: number): void {
+                const pages: Page[] | undefined = this.book?.pages;
+                if(pages?.length){
+                    this.page = pages[page_num];
+                    this.page_index = page_num;                    
+                }                
+            }
+        }
+    })
 
 </script>
 
@@ -40,19 +59,20 @@
         id="exampleFormControlTextarea1"
         rows="3"
         placeholder="Your message"
-        @change="setWordCount()"
-        v-model="words"
+        v-model="text"
         ></textarea>
         <div class="info">
             <span class="flex">
-                <p class="text-gray-700 pr-3">Page Num</p> <input class="text-gray-700 p-0.5" type="number" v-model="page_num"> <p class="text-gray-700">/{{page_count}}</p>
+                <p class="text-gray-700 pr-3">Page Num</p> <input class="text-gray-700 p-0.5" type="number" v-model="page_num"> <p class="text-gray-700">/{{book?.pages.length}}</p>
             </span>
-            <span><p class="text-gray-700">Word Count {{word_count}}</p> </span>    
+            <span><p class="text-gray-700">Word Count {{getWordCount(text)}}</p> </span>    
         </div>
         <div class="actions">
             <span class="flex space-x-3">
+                <button class="rounded-full p-2 bg-green-500" @disabled="page_index === 0" @click="changePage(--page_index)">PREV</button>
                 <button class="rounded-full p-2 bg-red-400">CANCEL</button>
                 <button class="rounded-full p-2 bg-blue-500">SAVE</button>
+                <button class="rounded-full p-2 bg-green-500" @click="changePage(++page_index)">NEXT</button>
             </span>
         </div>
     </div>

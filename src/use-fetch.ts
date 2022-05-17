@@ -9,12 +9,9 @@ export default function (url: string, options: any) {
     const fetchData = async () => {
         try {
             const res = await fetch(url, options);
-            console.log("RESSSSSS:", res)
             const json = await res.json()            
-            console.log("json:", json)
             state.response = json.library;
         } catch (err) {
-            console.log("rip fetch err:", err)
             state.error = err;
         } finally {
             state.fetching = false;

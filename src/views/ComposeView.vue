@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import { defineComponent } from '@vue/runtime-core'
 import Compose from '../components/Compose.vue'
-    let message = 'AY its the COMPOSE ITS GOOD OOOH';
+
+
 </script>
 <template>
     <div>
